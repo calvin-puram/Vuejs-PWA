@@ -23,6 +23,25 @@ workbox.setConfig({
 // );
 
 // workbox.core.setCacheNameDetails({ prefix: "pwa-train" });
+//push notification
+let click_open_url;
+self.addEventListener("push", (event) => {
+  const push_message = event.data.text();
+
+  click_open_url = "https://vuemeetup.com";
+
+  const options = {
+    body: push_message.body,
+    icon: "./img/logo.png",
+    image: "./img/puram.jpg",
+    vibrate: [200, 100, 200, 100, 200, 100, 200],
+    tag: "vibration-sample",
+  };
+
+  event.waitUntil(
+    self.registration.showNotification("my notification", options)
+  );
+});
 
 workbox.routing.registerRoute(
   new RegExp("https://fonts.(?:googleapis|gstatic).com/(.*)"),
@@ -37,6 +56,16 @@ workbox.routing.registerRoute(
     cacheableResponse: { statuses: [0, 200] },
   })
 );
+
+//redirect user when push notification is triggered
+self.addEventListener("notificationclick", (event) => {
+  const clickedNotification = event.notification;
+  clickedNotification.close();
+  if (click_open_url) {
+    const promiseChain = clients.openWindow(click_open_url);
+    event.waitUntil(promiseChain);
+  }
+});
 
 // self.addEventListener('message', (event) => {
 //   if (event.data && event.data.type === 'SKIP_WAITING') {
