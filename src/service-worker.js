@@ -18,10 +18,25 @@
 //   "/precache-manifest.5fa9e3af2cc820ad857968ff24643233.js"
 // );
 
-// workbox.core.setCacheNameDetails({prefix: "pwa-train"});
-workbox.setConfig({
-  debug: true,
-});
+workbox.core.setCacheNameDetails({ prefix: "pwa-train" });
+
+workbox.routing.registerRoute(
+  new RegExp("https://fonts.(?:googleapis|gstatic).com/(.*)"),
+  workbox.strategies.cacheFirst({
+    cacheName: "googleapis",
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 30,
+      }),
+    ],
+    method: "GET",
+    cacheableResponse: { statuses: [0, 200] },
+  })
+);
+
+// workbox.setConfig({
+//   debug: true,
+// });
 
 // self.addEventListener('message', (event) => {
 //   if (event.data && event.data.type === 'SKIP_WAITING') {
