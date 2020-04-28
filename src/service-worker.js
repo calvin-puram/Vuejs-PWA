@@ -1,4 +1,8 @@
 /* eslint-disable no-undef */
+
+workbox.setConfig({
+  debug: true,
+});
 // /**
 //  * Welcome to your Workbox-powered service worker!
 //  *
@@ -18,7 +22,7 @@
 //   "/precache-manifest.5fa9e3af2cc820ad857968ff24643233.js"
 // );
 
-workbox.core.setCacheNameDetails({ prefix: "pwa-train" });
+// workbox.core.setCacheNameDetails({ prefix: "pwa-train" });
 
 workbox.routing.registerRoute(
   new RegExp("https://fonts.(?:googleapis|gstatic).com/(.*)"),
@@ -33,10 +37,6 @@ workbox.routing.registerRoute(
     cacheableResponse: { statuses: [0, 200] },
   })
 );
-
-// workbox.setConfig({
-//   debug: true,
-// });
 
 // self.addEventListener('message', (event) => {
 //   if (event.data && event.data.type === 'SKIP_WAITING') {
